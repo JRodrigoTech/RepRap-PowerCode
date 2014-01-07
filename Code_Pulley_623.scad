@@ -3,22 +3,40 @@
 // By J.Rodigo (www.jra.so)
 // Licence Creative commons atribution & share alike.
 
-difference () {
-	union() {
-		cylinder (h = 0.5, r = 9, $fn=100);
+/**************************/
+// Parametros de la pieza  /
+/**************************/
 
-		translate([0, 0, 0.5])
-		cylinder(h = 1, r1 = 9, r2 = 6.2, $fn=100);
+dCoji = 10.3;	// Diametro del cojinete (10.3)
+hCoji = 5.2;	// Anchura del cojinete (5.2)
+dEje = 6;			// Diametro del eje (6)
+dPolea = 18;		// Diametro externo de la polea
+hCorrea = 6;			// Anchura de la correa (6)
 
-		translate([0, 0, 1.5])
-		cylinder (h = 3, r = 6.2, $fn=100);
-	}	
-	union() {
-		translate([0, 0, -1])
-		cylinder (h = 3, r = 3, $fn=100);
 
-		translate([0, 0, 1.9])
-		cylinder (h = 3, r = 5.15, $fn=100);
-	}	
- 
+module Polea(){
+	difference () {
+		union() {
+			// Cilindro - Base
+			cylinder (h = 0.5, r = dPolea/2, $fn=100);
+			// Cilindro - Canal para la correa
+			translate([0, 0, 0.5])
+			cylinder (h = 4, r = (dCoji/2)+1.05, $fn=100);
+			//	Chaflan entre la Base y el Canal
+			translate([0, 0, 0.5])
+			cylinder(h = 4-(hCorrea/2), r1 = dPolea/2, r2 = (dCoji/2)+1.05, $fn=100);
+		}	
+		union() {
+			// Taladro del eje
+			translate([0, 0, -1])
+			cylinder (h = 5, r = dEje/2, $fn=100);
+			// Taladro del cojinete
+			translate([0, 0, 4.5-hCoji/2])
+			cylinder (h = 5, r = dCoji/2, $fn=100);
+		}	
+	 
+	}
 }
+
+// Generamos la pieza
+Polea();
