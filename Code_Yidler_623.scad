@@ -33,13 +33,13 @@ module moperaciones(){
 	translate([5, -27, 8])
 	rotate( 90, [0, 1, 0])
 	cylinder(h = 7, r = 1.65, $fn=100);
-	// Chaflan interior
+	// Chaflán interior
 	translate([6, -14, -1])
 	rotate( 232, [0, 0, -1])
 	cube([2, 1, 18]);
 }
 
-// Generar un hexágono circunscrito (Diametro,altura) 
+// Generar un hexágono circunscrito (Diámetro,Altura) 
 module hexagono(d,h){ 
 	for (a = [0, 60,120]){ 
 		rotate( a, [0, 0, 1])
@@ -53,18 +53,18 @@ difference () {
 		// Pieza situada en {+X,-Y,+Z}
 		mpieza();
 		
-		// Pieza simetrica situada en {-X,-Y,+Z}
+		// Pieza simétrica situada en {-X,-Y,+Z}
 		mirror([ 1, 0, 0 ])
 		mpieza();
 	}	
 	union() {
 		// Operaciones situadas en {+X,-Y,+Z}
 		moperaciones();
-		// Operaciones simetricas situadas en {-X,-Y,+Z}
+		// Operaciones simétricas situadas en {-X,-Y,+Z}
 		mirror([ 1, 0, 0 ])
 		moperaciones();
 
-		// Operaciones unicas para cada lado
+		// Operaciones únicas para cada lado
 		// Vaciado para la tuerca hexagonal 
 		translate([-11, -27, 8])
 		rotate( 90, [0, 1, 0])
