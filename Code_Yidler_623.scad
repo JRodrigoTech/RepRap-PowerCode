@@ -3,12 +3,23 @@
 // By J.Rodigo (www.jra.so)
 // Licence Creative commons atribution & share alike.
 
+/**************************/
+// Parámetros de la pieza  /
+/**************************/
+
+dTal = 6.4;		// Diámetro del taladro (Soporte) (6.4)
+
+//Características del tornillo (Polea)
+dTor = 3.3;		// Diámetro de la rosca (3.3)
+dCab = 5.8;		// Diámetro de la cabeza (5.6)
+hHex = 5.8;		// Altura entre caras planas de la tuerca (5.8)
+
 
 // Media pieza
 module mpieza(){
 	// Bloque a lo largo del eje X
-	translate([0, -5, 0])
-	cube([11, 5, 16]);
+		translate([0, -5, 0])
+		cube([11, 5, 16]);
 
 	//	Bloque a lo largo del eje Y
 	//	Bloque grande
@@ -28,11 +39,11 @@ module moperaciones(){
 	// Taladro del soporte
 	translate([0, 1, 8])
 	rotate( 90, [1, 0, 0])
-	cylinder(h = 7, r = 3.2, $fn=100);
+	cylinder(h = 7, r = dTal/2, $fn=100);
 	// Taladro para la polea
 	translate([5, -27, 8])
 	rotate( 90, [0, 1, 0])
-	cylinder(h = 7, r = 1.65, $fn=100);
+	cylinder(h = 7, r = dTor/2, $fn=100);
 	// Chaflán interior
 	translate([6, -14, -1])
 	rotate( 232, [0, 0, -1])
@@ -47,31 +58,49 @@ module hexagono(d,h){
 	}
 }
 
-// Generamos la pieza y las operaciones
-difference () {
-	union() {
-		// Pieza situada en {+X,-Y,+Z}
-		mpieza();
+// Alojamiento de la cabeza del tornillo 
+module tcab(){ 
+	translate([10, -27, 8])
+	rotate( 90, [0, 1, 0])
+	cylinder(h = 2, r = dCab/2, $fn=100);
+}
+
+// Alojamiento de la tuerca
+module tuerca(){ 
+	translate([-11, -27, 8])
+	rotate( 90, [0, 1, 0])
+	hexagono(hHex, 4);
+
+}
+// Creamos la pieza a partir de las operacione
+module pieza(){
+	difference () {
+		union() {
+			// Pieza situada en {+X,-Y,+Z}
+			mpieza();	
 		
-		// Pieza simétrica situada en {-X,-Y,+Z}
-		mirror([ 1, 0, 0 ])
-		mpieza();
-	}	
-	union() {
-		// Operaciones situadas en {+X,-Y,+Z}
-		moperaciones();
-		// Operaciones simétricas situadas en {-X,-Y,+Z}
-		mirror([ 1, 0, 0 ])
-		moperaciones();
+			// Pieza simétrica situada en {-X,-Y,+Z}
+			mirror([ 1, 0, 0 ])
+			mpieza();
+		}	
+		union() {
+			// Operaciones situadas en {+X,-Y,+Z}
+			moperaciones();
+	
+			// Operaciones simétricas situadas en {-X,-Y,+Z}
+			mirror([ 1, 0, 0 ])
+			moperaciones();
 
 		// Operaciones únicas para cada lado
-		// Vaciado para la tuerca hexagonal 
-		translate([-11, -27, 8])
-		rotate( 90, [0, 1, 0])
-		hexagono(5.8, 4);
-		// Vaciado para la cabeza del tornillo
-		translate([10, -27, 8])
-		rotate( 90, [0, 1, 0])
-		cylinder(h = 2, r = 2.9, $fn=100);
-	}	
+			// Vaciado para la cabeza del tornillo
+			tcab();
+			// Vaciado para la tuerca hexagonal 
+			tuerca();
+		}	
+	}
 }
+
+// Generamos la pieza!!
+
+	pieza();
+
