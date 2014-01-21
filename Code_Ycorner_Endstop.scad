@@ -3,53 +3,106 @@
 // By J.Rodigo (www.jra.so)
 // Licence Creative commons atribution & share alike.
 
-// Pieza y las operaciones
-difference () {
-		translate([0, 0, 0])
-		cube([20, 30, 16]);	
-	union() {
-		// Zona Cilindrica
-		translate([4.7, 22.5, -1])
-		cube([10.6, 8, 18]);
+/**************************/
+// Parámetros de la pieza  /
+/**************************/
 
-		translate([10, 22.5, -1])
-		rotate( 90, [0, 0, 1])
-		cylinder(h = 18, r = 5.3, $fn=100);
+// Diámetro del tornillo (10.6)
+dPas = 10.6;	
 
-		translate([10, 19.08, 3.41])
-		rotate(-33.75, [1,0,0])
-		cylinder(h = 16, r = 5.3, center=true , $fn=100);
-		translate([10, 25.38, 3.41])
-		rotate(-33.75, [1,0,0])
-		cube([10.6, 10.6, 18], center=true);
+//Características del final de carrera
+hEnd = 13.6;	// Altura (13.6)
+wEnd = 5.8;		// Anchura (5.8)
+dEnd = 10;		// Profundidad (Inc.pins) (10)
 
-		// Zona plana
-		translate([3.5, 3.5, -1])
-		cube([13, 2.5, 8]);
 
-		translate([7, -1, -1])
-		cube([6, 2, 8]);
-
-		translate([7, 1, -1])
-		rotate(225, [0,0,1])
-		cube([2, 2, 8]);
-
-		translate([13, 1, -1])
-		rotate(225, [0,0,1])
-		cube([2, 2, 8]);
-
-		translate([-1, 0, 13])
-		rotate(45, [1,0,0])
-		cube([22, 5, 5]);
-
-		translate([3.5, -1, 6])
-		cube([13, 7, 11]);
-
-		translate([10.5, 10.95, 6])
-		rotate(285, [0,0,1])
-		union() {
-			cube([14, 5.8, 11]);
-			cube([8, 10, 5]);
-		}
-	}	
+// Pieza principal a trabajar
+module bloque(){
+	cube([20, 30, 16]);	
 }
+
+// Taladro y redondeo en forma de U (Centrado)
+// (d,h,u) = (diámetro,altura,largo de vaciado)
+module RedU(d,h,u){ 
+		// Taladro vertical
+		translate([(d/2)+(u-d)/2, 0, 0])
+		cube([u, d, h],center=true);
+		// Vaciado en forma de U
+		translate([0, 0, -h/2])
+		rotate( 90, [0, 0, 1])
+		cylinder(h = h, r = d/2, $fn=100);
+}
+
+// Vaciado en forma de U para el tornillo
+module taladro(){
+	// Vaciado en forma de U (Vertical)
+	translate([10, 22.5, 8])
+	rotate( 90, [0, 0, 1])
+	RedU(dPas,17,8);
+	// Vaciado en forma de U (Inclinado)
+	translate([10, 19.08, 3.41])
+	rotate(-33.75, [1,0,0])
+	rotate( 90, [0, 0, 1])
+	RedU(dPas,25,8);
+}
+
+// Vaciado y chaflán
+module vaciochaflan(){
+	// Vaciado plano
+	translate([3.5, -1, 6])
+	cube([13, 7, 11]);
+	// Vaciado chaflán
+	translate([-1, 0, 13])
+	rotate(45, [1,0,0])
+	cube([22, 5, 5]);
+}
+
+// Tope para la varilla lisa
+module tope(){	
+	// Tope de soporte de la varilla lisa
+	translate([7, -1, -1])
+	cube([6, 2, 8]);
+	// Chaflán a 45º
+	translate([7, 1, -1])
+	rotate(225, [0,0,1])
+	cube([2, 2, 8]);
+	// Chaflán a 45º
+	translate([13, 1, -1])
+	rotate(225, [0,0,1])
+	cube([2, 2, 8]);
+	// Vaciado interior del tope
+	translate([3.5, 3.5, -1])
+	cube([13, 2.5, 8]);
+}
+
+// Zócalo para el final de carrera 
+module endstop(){
+	translate([10.5, 10.95, 16-dEnd])
+	rotate(285, [0,0,1])
+	union() {
+		// Hueco del final de carrera
+		cube([hEnd, wEnd, dEnd+1]);
+		//Pasa cables
+		cube([8, 10, 5]);
+	}
+}
+
+
+// Creamos la pieza a partir del bloque y todas sus operaciones
+module pieza(){
+	// Bloque principal de la pieza
+	difference() {
+		bloque();
+		union() {
+			taladro();
+			vaciochaflan();
+			tope();
+			endstop();
+		}
+	}
+}
+
+
+// Generamos la pieza!!
+
+	pieza();
