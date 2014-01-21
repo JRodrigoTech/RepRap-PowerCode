@@ -16,7 +16,7 @@ module bloque(){
 }
 
 // Taladro y redondeo en forma de U (Centrado)
-// (d,h,u) = (diámetro,altura,lardo de vaciado)
+// (d,h,u) = (diámetro,altura,largo de vaciado)
 module RedU(d,h,u){ 
 		// Taladro vertical
 		translate([(d/2)+(u-d)/2, 0, 0])
@@ -82,9 +82,6 @@ module pieza(){
 	}
 }
 
-
 // Generamos la pieza!!
 
 	pieza();
-
-
