@@ -117,6 +117,7 @@ module chafvar(){
 	cube([8, 12, 7]);
 }
 
+// Unión de todos los bloques y operaciones
 module pieza(){
 	difference () {
 		// Bloque a trabajar
