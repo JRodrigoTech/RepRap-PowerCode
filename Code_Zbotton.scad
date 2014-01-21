@@ -18,8 +18,6 @@ dCab = 20;		// Diámetro de la cabeza (20)
 hcub = 6.8;		// Anchura del cuadrado (6.8)
 
 
-
-
 // Bloque a lo largo de X
 module bloqueX(){
 	difference(){
@@ -119,7 +117,7 @@ module tornillo(){
 
 }
 
-
+// Unión de todos los bloques y operaciones
 module pieza(){
 	difference () {
 		union() {
