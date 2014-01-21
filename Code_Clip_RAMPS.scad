@@ -3,93 +3,130 @@
 // By J.Rodigo (www.jra.so)
 // Licence Creative commons atribution & share alike.
 
-// Media Pieza
-module mpieza(){
-	cube([27.5, 6, 15]);
-	
-	cube([4, 24.2, 15]);
+/**************************/
+// Parámetros de la pieza  /
+/**************************/
 
-	translate([23.5, 0, 0])
-	cube([4, 34, 15]);
+// Características del soporte 
+hCen = 19.2;	// Altura del soporte central (19.2)
+hClip = 4.8;	// Altura del clip respecto al soporte central (4.8)
+wClip = 47;		// Anchura de clip a clip (interior)(47)
 
-	translate([21.5, 30, 0])
-	cube([6, 4, 15]);
+//Características del tornillo
+dTor = 3.4;		// Diámetro de la rosca (3.4)
+hHex = 5.7;		// Altura entre caras planas de la tuerca (5.7)
+
+/**************************/
+// Partes para media pieza /
+/**************************/
+
+// Bloque de la base del soporte
+module base(){
+	difference(){
+		// Bloque
+		cube([wClip/2+4, 6, 15]);
+		// Vaciado inferior 
+		translate([-1, -1, -1])
+		cube([wClip/2-5, 3, 17]);
+	}
 }
 
-// Operaciones para media pieza
-module moperaciones(){
-
-	translate([0, -1, -1])
-	cube([17.5, 3, 17]);
-
-	translate([24.15, 7, 7.5])
-	rotate( 90, [1, 0, 0])
-	union() {
-		hexagono(5.7, 8);
-		cylinder(h = 8, r = 1.7, $fn=100);
+// Bloque central del soporte
+module centro(){
+	difference(){
+		// Bloque central
+		translate([0, 4, 0])
+		cube([4, hCen+1, 15]);
+		// Chaflán a lo largo del eje Z
+		translate([3, hCen+5, -1])
+		rotate( -45 ,[0, 0, 1])
+		cube([2, 1, 17]);
 	}
-   
-	// Chaflanes del centro
-	translate([3, 24.2, -1])
-	rotate( -45 ,[0, 0, 1])
-	cube([2, 1, 17]);
-
-	translate([0, 23.2, 15])
-	rotate( 90 ,[0, 1, 0])
-	rotate( 45 ,[0, 0, 1])
-	cube([2, 1, 4]);
-
-	translate([0, 23.2, 0])
-	rotate( 90 ,[0, 1, 0])
-	rotate( 45 ,[0, 0, 1])
-	cube([1, 2, 4]);
-
-	// Chaflanes del extremo (duro)!!
-	translate([21.5, 30, -1])
-	rotate( 63.43 ,[0, 0, 1])
-	cube([5, 2, 17]);
-
-	translate([23.5, 30, 14])
-	rotate( 90 ,[1, 0, 0])
-	rotate( 45 ,[0, 0, 1])
-	cube([2, 1, 24]);
-
-	translate([24.5, 30, 0])
-	rotate( 90 ,[1, 0, 0])
-	rotate( 135 ,[0, 0, 1])
-	cube([2, 1, 24]);
+}
+// hCen+hClip
+// Bloque del clip lateral
+module clip(){
+	difference(){
+		// Cubo del clip a lo largo del eje Y
+		translate([wClip/2, 0, 0])
+		cube([4, hCen+hClip+10, 15]);
+		// Chaflanes
+		union(){
+			// Chaflán superior
+			translate([wClip/2, hCen+hClip+6, 14])
+			rotate( 90 ,[1, 0, 0])
+			rotate( 45 ,[0, 0, 1])
+			cube([2, 1, hCen+hClip]);
+			// Chaflán inferior 
+			translate([wClip/2+1, hCen+hClip+6, 0])
+			rotate( 90 ,[1, 0, 0])
+			rotate( 135 ,[0, 0, 1])
+			cube([2, 1, hCen+hClip]);
+		}
+	}
+	// Extremo (duro) del clip
+	difference(){
+		translate([wClip/2-2, hCen+hClip+6, 0])
+		cube([6, 4, 15]);
+		// Chaflán 
+		translate([wClip/2-2, hCen+hClip+6, -1])
+		rotate( 63.43 ,[0, 0, 1])
+		cube([5, 2, 17]);
+	}
 }
 
 // Generar un hexágono circunscrito (Diametro,altura) 
-module hexagono(d,h,c){ 
+module hexagono(d,h){ 
 	for (a = [0, 60,120]){ 
 		rotate( a, [0, 0, 1])
 		cube([d, d*tan(30), h], center = true);
 	}
 }
 
-// Creamos la pieza y las operaciones
-module pieza(){
-	difference () {
-		union() {
-			mpieza();
-			mirror([ 1, 0, 0 ])
-			mpieza();
-		}	
-		union() {
-			moperaciones();
-			mirror([ 1, 0, 0 ])
-			moperaciones();
-		}	
+// Alojamiento para el tornillo
+module tornillo(){
+	translate([wClip/2+0.65, 7, 7.5])
+	rotate( 90, [1, 0, 0])
+	union() {
+		hexagono(hHex, 8);
+		cylinder(h = 8, r = dTor/2, $fn=100);
 	}
 }
 
-// Generamos una pieza
-pieza();
+// Unimos tordas las partes para crear la media Pieza
+module mpieza(){
+	difference(){
+		union(){
+			// Bloque de la base del soporte
+			base();
+			// Bloque central del soporte
+			centro();
+			// Bloque del clip lateral
+			clip();
+		}
+		// Alojamiento para el tornillo
+		tornillo();
+	}
+}
+
+// Unimos las dos mitades para crear la pieza entera
+module pieza(){
+	mpieza();
+	mirror([ 1, 0, 0 ])
+	mpieza();
+}
+
+/**************************/
+//  Generamos las piezas   /
+/**************************/
+
+// Generamos la pieza
+	
+	pieza();
 
 // Generamos otra pieza desplazada y simétrica
-translate([12, 43, 0])
-mirror([ 0, 1, 0 ])
-pieza();
 
+	translate([wClip/4, hCen+hClip+20, 0])
+	mirror([ 0, 1, 0 ])
+	pieza();
 
