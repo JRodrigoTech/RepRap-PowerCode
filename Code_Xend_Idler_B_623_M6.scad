@@ -69,9 +69,6 @@ module base(){
 	}
 }
 
-//base();
-
-
 // Medio soporte
 module msoporte(){
 	difference(){
@@ -111,7 +108,6 @@ module msoporteope(){
 	
 }
 
-
 // Base de la pieza
 module soporte(){
 	difference(){
@@ -125,6 +121,11 @@ module soporte(){
 		union(){
 			// Media parte de las operaciones en +X
 			msoporteope();
+			// Chaflanes a lo largo del eje Z
+			translate([14, 1.7, 0])
+			chamfer(5,41,0);
+			translate([14, -1.7, 0])
+			chamfer(5,41,2);
 			// Media parte de las operaciones en -X 
 			mirror([ 1, 0, 0 ])
 			msoporteope();
