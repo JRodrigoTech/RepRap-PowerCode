@@ -1,4 +1,4 @@
-// Created from Code_LevelExtruder.stl
+// Created from Code_Xend_Idler_A_M6.stl
 // https://github.com/Mecan0/Code
 // By J.Rodigo (www.jra.so)
 // Licence Creative commons atribution & share alike.
@@ -9,11 +9,11 @@ include <Code_Config.scad>;
 // Parámetros de la pieza  /
 /**************************/
 
-// Tuerca varilla roscada
+// Tuerca varilla roscada del eje Z
 hTuZ = 7.96744 ;	// Distancia entre caras de la tuerca (7.96744)
 
 // Tuerca del tensor
-hTuTen = 10.2 ;	// Distancia entre caras de la tuerca (10.2)
+hTuTen = 10.2 ;		// Distancia entre caras de la tuerca (10.2)
 
 
 // Alojamiento de las varillas lisas ( h = longitud )
