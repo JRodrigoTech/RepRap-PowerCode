@@ -3,16 +3,25 @@
 // Licence Creative commons atribution & share alike.
 // Author: Mecano ( https://github.com/Mecan0/Code )
 
-//************************************//
-// Parámetros de configuración global //
-//************************************//
+//*************************************************//
+//       Parámetros de configuración global        //
+//*************************************************//
 
-$fn = 100;
+// Resolución de las superficies curvas
+$fn = 100 ;		
+
+// Cojinetes Lineales
+dCoLi = 16.2 ;	// Diámetro
+
+// Varillas lisas
+dVaLi = 8.15 ; // Diámetro
 
 
-//************************************//
-//        Módulos de uso global       //
-//************************************//
+
+
+//*************************************************//
+//              Módulos de uso global              //
+//*************************************************//
 
 // Generar un hexágono circunscrito (Diámetro,altura) 
 module hexagono(d,h){ 
