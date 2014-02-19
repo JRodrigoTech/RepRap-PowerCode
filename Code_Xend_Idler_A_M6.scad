@@ -61,10 +61,10 @@ module bloque(){
 			cube([40, 17, 58]);
 			// Cilindro para los cojinetes lineales
 			translate([15, -6.5, 0])
-			cylinder(h = 58, r = 10.6);
+			cylinder(h = 58, r = 11);
 			// Aplanado del cilindro anterior
-			translate([4.4, -6.5, 0])
-			cube([21.2, 10.6, 58]);
+			translate([4, -6.5, 0])
+			cube([22, 10.6, 58]);
 			// Alojamiento para la tuerca del eje Z
 			translate([32, -6.5, 0])
 			varros();
