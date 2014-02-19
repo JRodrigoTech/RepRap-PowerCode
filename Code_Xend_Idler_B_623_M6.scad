@@ -26,7 +26,7 @@ module mbase(){
 		// Redondeo superior 
 		translate([0, 0, 10])
 		rotate( 90, [1, 0, 0])
-		cylinder(h = 9.5, r = 5, $fn=100);	
+		cylinder(h = 9.5, r = 5);	
 	}
 }
 
@@ -38,7 +38,7 @@ module mbaseope(){
 	// Taladro para el tornillo
 	translate([0, -5, 10])
 	rotate( 90, [1, 0, 0])
-	cylinder(h = 5, r = dToSo/2, $fn=100);
+	cylinder(h = 5, r = dToSo/2);
 }
 
 // Base de la pieza
@@ -64,7 +64,7 @@ module base(){
 			// Zócalo para la tuerca
 			translate([0, -10, 10])
 			rotate( -90, [1, 0, 0])
-			cylinder(h = 2, r = dToCh/2, $fn=100);
+			cylinder(h = 2, r = dToCh/2);
 		}
 	}
 }
@@ -91,7 +91,7 @@ module msoporteope(){
 		// Redondeo interior 
 		translate([0, 6, 10])
 		rotate( 90, [1, 0, 0])
-		cylinder(h = 12, r = 9.5, $fn=100);	
+		cylinder(h = 12, r = 9.5);	
 		// Bloque del medio
 		translate([-1, -6, 17.6])
 		cube([7, 12, 1]);
@@ -131,7 +131,7 @@ module soporte(){
 			msoporteope();
 			// Taladro superior para el tensado
 			translate([0, 0, 32 + 0.3]) // Se añade un 0.3 para poder imprimir el puente
-			cylinder(h = 10, r = dTor/2, $fn=100);
+			cylinder(h = 10, r = dTor/2);
 		}
 	}
 }
