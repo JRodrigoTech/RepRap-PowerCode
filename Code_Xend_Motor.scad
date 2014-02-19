@@ -9,6 +9,13 @@ include <Code_Config.scad>;
 // Parámetros de la pieza  /
 /**************************/
 
+// Soporte para la tuerca del tornillo que regula
+// la altura con el final de carrera
+// { true = Añadir } { false = Quitar }
+TorFinal = true;	
+dTaTorfinal = 3.6 ;	// Diámetro del taladro
+hTuer = 5.8 ; 		// Distancia entre caras de la tuerca
+
 // Tuerca varilla roscada del eje Z
 hTuZ = 7.96744 ;	// Distancia entre caras de la tuerca (7.96744)
 
@@ -61,10 +68,10 @@ module bloque(){
 			cube([40, 17, 58]);
 			// Cilindro para los cojinetes lineales
 			translate([25, -6.5, 0])
-			cylinder(h = 58, r = 10.6);
+			cylinder(h = 58, r = 11);
 			// Aplanado del cilindro anterior
-			translate([14.4, -6.5, 0])
-			cube([21.2, 10.6, 58]);
+			translate([14, -6.5, 0])
+			cube([22, 10.6, 58]);
 			// Alojamiento para la tuerca del eje Z
 			translate([8, -6.5, 0])
 			varros();
@@ -74,7 +81,7 @@ module bloque(){
 			translate([25, -6.5, -1])
 			cylinder(h = 60, r = dCoLi/2);
 			// Ranura del alojamiento
-			translate([25, -6.5, 0.5])
+			translate([25, -7.5, 0.5])
 			rotate( 110, [0, 0, 1])
 			cube([1, 11, 58]);
 		}	
@@ -209,6 +216,27 @@ module sopmotorB(){
 	}
 }
 
+// Soporte para el tornillo del final de carrera
+module soptorfinal(){
+	difference(){
+		// Rectángulo base
+		translate([-8.2, 0, -14])
+		cube([8.2, 8, 14]);
+		union(){
+			// Taladro para el paso del tornillo
+			translate([-4.23, 4, -15])
+			cylinder(h = 16, r = dTaTorfinal/2);
+			// Alojamiento de la tuerca
+			translate([-4.23, 4, 0])
+			hexagono(hTuer,6);
+			// Chaflán inferior
+			translate([-9, 0, -4])
+			rotate( -140.27, [1, 0, 0])
+			cube([10, 8, 14]);
+		}
+	}
+}
+
 // Unimos los diferentes módulos que forman la pieza
 // Y aplicamos algunas operaciones comunes
 module pieza(){
@@ -236,8 +264,18 @@ module pieza(){
 			translate([8.66, -1, 30])
 			mirror([ 1, 0, 0 ])
 			tencha();
+			// Agujero superior
+			translate([33.5, 2, 55])
+			cylinder(h = 4, r = 2.55);
 		}	
 	}
+	// Soporte para la rosca del tornillo 
+	// que regula la altura con el final de carrera
+	if ( TorFinal == true ){
+		translate([44, -7.9, 51.5])
+		soptorfinal();
+	}
+	
 }
 
 // Generamos la pieza!!
