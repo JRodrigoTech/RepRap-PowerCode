@@ -3,7 +3,7 @@
 // By J.Rodigo (www.jodrigo.net)
 // Licence Creative commons atribution & share alike.
 
-include <Code_Config.scad>;
+include <PowerCode_Config.scad>;
 
 /**************************/
 // Parámetros de la pieza  /

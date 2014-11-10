@@ -36,7 +36,7 @@ module taladro(){
 	// Pequeño
 	translate([-1, 6, 4.7])
 	rotate( 90, [0, 1, 0])
-	#cylinder(h = 10, r = dPeque/2, $fn=100);
+	cylinder(h = 10, r = dPeque/2, $fn=100);
 	// Grande
 	translate([-1, 6, 4.7])
 	rotate( 90, [0, 1, 0])
